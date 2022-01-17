@@ -68,6 +68,33 @@ check_letter_exists() {
 	return 1
 }
 
+# Pretty print key square
+print_keysquare() {
+	tmp=""
+	count=0
+	for i in "${KEY_SQUARE[@]}"
+	do
+		[ "${count}" != "5" ] && tmp="${tmp}${i} " && count=$((${count}+1))
+		[ "${count}" = "5" ] && printf "%s\n" "${tmp}" && count=0 && tmp=""
+	done
+}
+#KEY_SQUARE=(a b c d e f g h i j k l m n o p q r s t u v w x y z)
+#print_keysquare > ${OUTPUT_PATH}
+
+# Read inputfile into an array
+read_keysquare() {
+	
+	while read -r line;
+	do
+		#echo "$line"
+		KEY_SQUARE+=($line)
+	done < ${KEYSQUARE_PATH}
+}
+#KEYSQUARE_PATH=${OUTPUT_PATH}
+#read_keysquare
+#echo "${KEY_SQUARE[@]}"
+#echo "${KEY_SQUARE[1]}"
+
 # Generate the keysquare from users input word
 generate_keysquare() {
 	echo -e "Enter your cipher keyword below\nTry to use a simple 5 letter word"
@@ -89,32 +116,22 @@ generate_keysquare() {
 		fi
 	done	
 	
+	echo "Sending keysquare to ${OUTPUT_PATH}"
+	print_keysquare > "${OUTPUT_PATH}"
+
 }
 #generate_keysquare
 #echo "${KEY_SQUARE[@]}"
 
-# Pretty print key square
-print_keysquare() {
-	tmp=""
-	count=0
-	for i in "${KEY_SQUARE[@]}"
-	do
-		[ "${count}" != "5" ] && tmp="${tmp}${i} " && count=$((${count}+1))
-		[ "${count}" = "5" ] && printf "%s\n" "${tmp}" && count=0 && tmp=""
-	done
-}
-KEY_SQUARE=(a b c d e f g h i j k l m n o p q r s t u v w x y z)
-print_keysquare > ${OUTPUT_PATH}
-
 # Encrypt the plaintext message passed to the script
 encrypt_message() {
-	echo ""
+	message_upper=${INPUT_STRING^^}
 }
 
 
 # Decrypt any encrypted text
 decrypt_message() {
-	echo ""
+	message_upper=${INPUT_STRING^^}
 }
 
 
