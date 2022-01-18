@@ -8,10 +8,11 @@
 #
 ################
 
+declare -A KEYSQUARE_MAP
 GENERATE_KEYSQUARE=0
-INPUT_STRING=
+INPUT_STRING=""
 OUTPUT_PATH=/tmp/keysquare
-KEYSQUARE_PATH=
+KEYSQUARE_PATH=${OUTPUT_PATH}
 ENCRYPT=0
 DECRYPT=0
 ALPHA=(a b c d e f g h i j k l m n o p q r s t u v w x y z)
@@ -81,19 +82,25 @@ print_keysquare() {
 #KEY_SQUARE=(a b c d e f g h i j k l m n o p q r s t u v w x y z)
 #print_keysquare > ${OUTPUT_PATH}
 
-# Read inputfile into an array
+# Read inputfile into an HashMap
 read_keysquare() {
-	
+
+	row=0
 	while read -r line;
 	do
-		#echo "$line"
-		KEY_SQUARE+=($line)
+		tmp=($line)
+		for i in ${!tmp[@]}
+		do
+			key="$row,$i"
+			KEYSQUARE_MAP["$key"]="${tmp[$i]}"	
+		done
+		row=$(($row+1))
 	done < ${KEYSQUARE_PATH}
 }
-#KEYSQUARE_PATH=${OUTPUT_PATH}
 #read_keysquare
-#echo "${KEY_SQUARE[@]}"
-#echo "${KEY_SQUARE[1]}"
+#echo "${KEYSQUARE_MAP[@]}"
+#echo "${!KEYSQUARE_MAP[@]}"
+#echo "${KEYSQUARE_MAP[1,1]}"
 
 # Generate the keysquare from users input word
 generate_keysquare() {
@@ -126,6 +133,23 @@ generate_keysquare() {
 # Encrypt the plaintext message passed to the script
 encrypt_message() {
 	message_upper=${INPUT_STRING^^}
+
+	#Remove spaces then split into digrams
+	digram=$(echo "$message_upper" | sed 's/ //g' | sed 's/\(.\{2\}\)/\1 /g')
+	#Remove any double characters in digram (e.g. MM)
+	digram_adj=$(echo "$digram" | sed 's/\(.\)\1/\1/g')
+
+	# If duplicates found then reshuffle again until resolved
+	while [ "${digram}" != "${digram_adj}" ];
+	do
+		digram=$(echo "${digram_adj}" | sed 's/ //g' | sed 's/\(.\{2\}\)/\1 /g')
+		digram_adj=$(echo "$digram" | sed 's/\(.\)\1/\1/g')
+	done	
+
+	#If there is a lone digram add an X character to the end
+	digram=$(echo "${digram}" | awk '{ if(length($0) % 2 != 0) print $0 "X"; else print $0 }')
+
+	#TODO: Implement Rules for cipher	
 }
 
 
