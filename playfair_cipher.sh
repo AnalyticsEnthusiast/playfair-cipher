@@ -19,8 +19,16 @@ DECRYPT=0
 ALPHA=(a b c d e f g h i j k l m n o p q r s t u v w x y z)
 KEY_SQUARE=()
 
-usage(){
-	echo "Usage: $0 [-g <string> ] [ -e <string> ] [ -d <string> ] [ -h help ]" 1>&2; exit 1;
+usage() {
+cat << EOF
+Usage for: $0
+	[ -g <Keysquare Path> ] - Path location of where you would like to send your keysquare cipher
+	[ -G ] - Default Path (/tmp/keysquare)
+	[ -e <Plaintext> ] - Plaintext string you would like to encrypt
+	[ -d <Encrypted string> ] - Encrypted text you would like decrypted
+	[ -p <Keysquare Path> ] - Custom path location of keysquare cipher file
+	[ -h ] - Help text
+EOF
 }
 
 
