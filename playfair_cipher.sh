@@ -4,7 +4,7 @@
 #
 # Date: 2022-01-13
 #
-# Description: Implementation of the playfair cipher to encrypt text 
+# Description: Implementation of a playfair cipher to encrypt text 
 #
 ################
 
@@ -25,12 +25,15 @@ usage(){
 
 
 
-while getopts "g:e:d:p:h" opt
+while getopts "g:Ge:d:p:h" opt
 do
 	case "$opt" in 
 	g)
 		GENERATE_KEYSQUARE=1
 		OUTPUT_PATH="${OPTARG}"
+	;;
+	G)
+		GENERATE_KEYSQUARE=1
 	;;
 	e)
 		INPUT_STRING="${OPTARG}"
@@ -320,3 +323,6 @@ main() {
 	
 	[ "${DECRYPT}" = "1" ] && decrypt_message
 }
+
+main
+
