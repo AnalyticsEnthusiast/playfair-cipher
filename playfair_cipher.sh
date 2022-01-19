@@ -17,8 +17,6 @@ KEYSQUARE_PATH=${OUTPUT_PATH}
 ENCRYPT=0
 DECRYPT=0
 ALPHA=(a b c d e f g h i j k l m n o p q r s t u v w x y z)
-N_ROW=5
-N_COL=5
 KEY_SQUARE=()
 
 usage(){
@@ -87,18 +85,23 @@ print_keysquare() {
 
 # Read inputfile into an HashMap
 read_keysquare() {
-
-	row=0
-	while read -r line;
-	do
-		tmp=($line)
-		for i in ${!tmp[@]}
+	
+	if [ -f "${KEYSQUARE_PATH}" ];
+	then	
+		row=0
+		while read -r line;
 		do
-			key="$row,$i"
-			KEYSQUARE_MAP["$key"]="${tmp[$i]}"	
-		done
-		row=$(($row+1))
-	done < ${KEYSQUARE_PATH}
+			tmp=($line)
+			for i in ${!tmp[@]}
+			do
+				key="$row,$i"
+				KEYSQUARE_MAP["$key"]="${tmp[$i]}"	
+			done
+			row=$(($row+1))
+		done < ${KEYSQUARE_PATH}
+	else
+		echo "No keysquare file found, use -g to generate" && exit 1
+	fi
 }
 #read_keysquare
 #echo "${KEYSQUARE_MAP[@]}"
