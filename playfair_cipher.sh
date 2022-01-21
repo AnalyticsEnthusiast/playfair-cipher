@@ -119,12 +119,32 @@ read_keysquare() {
 #echo "${!KEYSQUARE_MAP[@]}"
 #echo "${KEYSQUARE_MAP[1,1]}"
 
+# Checks if user input meets requirements
+# Must be a 5 letter word
+# Contains only letters (No numbers, spaces or ascii characters)
+validate_user_input(){
+
+	USER_WORD="$1"
+
+	[ "${#USER_WORD}" > "5" ] && exit 1
+	
+	if [[ "${USER_WORD}" =~ [^a-zA-Z] ]];
+	then
+		exit 1
+	fi	
+
+}
+
+
 # Generate the keysquare from users input word
 generate_keysquare() {
 
 	echo -e "Enter your cipher keyword below\nTry to use a simple 5 letter word"
 	read -p "Cipher Keyword: " USER_INPUT_KEYWORD 
 	USER_KEYWORD="${USER_INPUT_KEYWORD^^}"
+	
+	#Validate user plaintext input
+	validate_user_input "${USER_KEYWORD}"
 
 	letters=($(echo "${USER_KEYWORD}" | awk '$1=$1' FS= OFS=" "))	
 
