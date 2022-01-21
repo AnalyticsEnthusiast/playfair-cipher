@@ -8,7 +8,7 @@
 #
 ################
 
-#Variables
+# Variables
 declare -A KEYSQUARE_MAP
 GENERATE_KEYSQUARE=0
 INPUT_STRING=""
@@ -30,7 +30,6 @@ Usage for: $0
 	[ -h ] - Help text
 EOF
 }
-
 
 
 while getopts "g:Ge:d:p:h" opt
@@ -94,6 +93,11 @@ print_keysquare() {
 #KEY_SQUARE=(a b c d e f g h i j k l m n o p q r s t u v w x y z)
 #print_keysquare > ${OUTPUT_PATH}
 
+validate_keysquare() {
+	echo ""
+}
+
+
 # Read inputfile into an HashMap
 read_keysquare() {
 	
@@ -126,11 +130,11 @@ validate_user_input(){
 
 	USER_WORD="$1"
 
-	[ "${#USER_WORD}" > "5" ] && exit 1
+	[ "${#USER_WORD}" -gt "5" ] && exit 1
 	
-	if [[ "${USER_WORD}" =~ [^a-zA-Z] ]];
+	if [[ ${USER_WORD} =~ [^a-zA-Z] ]];
 	then
-		exit 1
+		echo "keyword must contain only letters" && exit 1
 	fi	
 
 }
