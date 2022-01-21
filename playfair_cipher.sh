@@ -112,7 +112,6 @@ validate_keysquare() {
 
 # Read inputfile into an associative array
 read_keysquare() {
-	
 	if [ -f "${KEYSQUARE_PATH}" ];
 	then	
 		row=0
@@ -203,7 +202,7 @@ encrypt_message() {
 
 	message_upper=${INPUT_STRING^^}
 
-	# Read in key square into an HashMap
+	# Read in key square into a HashMap
 	read_keysquare
 
 	#Remove spaces then split into digrams
@@ -268,7 +267,7 @@ encrypt_message() {
 decrypt_message() {
 
 	message_upper=${INPUT_STRING^^}
-	# Read in key square into an HashMap
+	# Read in key square into a HashMap
 	read_keysquare
 
 	#Remove spaces then split into digrams
