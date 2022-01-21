@@ -90,8 +90,6 @@ print_keysquare() {
 		[ "${count}" = "5" ] && printf "%s\n" "${tmp}" && count=0 && tmp=""
 	done
 }
-#KEY_SQUARE=(a b c d e f g h i j k l m n o p q r s t u v w x y z)
-#print_keysquare > ${OUTPUT_PATH}
 
 # Check if the input keysquare is valid
 validate_keysquare() {
@@ -135,10 +133,6 @@ read_keysquare() {
 	# Validate keysquare
 	validate_keysquare
 }
-#read_keysquare
-#echo "${KEYSQUARE_MAP[@]}"
-#echo "${!KEYSQUARE_MAP[@]}"
-#echo "${KEYSQUARE_MAP[1,1]}"
 
 # Checks if user input meets requirements
 # Must be a 5 letter word
@@ -186,8 +180,6 @@ generate_keysquare() {
 	print_keysquare > "${OUTPUT_PATH}"
 
 }
-#generate_keysquare
-#echo "${KEY_SQUARE[@]}"
 
 # Get key that corresponds to input letter in playfair square
 get_key() {
@@ -200,7 +192,6 @@ get_key() {
 	done
 
 }
-#get_key "X"
 
 pretty_print() {
 	INPUT_TEXT=""
@@ -221,36 +212,26 @@ encrypt_message() {
 	#Remove any double characters in digram (e.g. MM with MX)
 	digram_adj=$(echo "$digram" | sed 's/\(.\)\1/\1X/g')
 	
-	# If duplicates found then reshuffle again until resolved
-	#while [ "${digram}" != "${digram_adj}" ];
-	#do
-	#	digram=$(echo "${digram_adj}" | sed 's/ //g' | sed 's/\(.\{2\}\)/\1 /g')
-	#	digram_adj=$(echo "$digram" | sed 's/\(.\)\1/\1X/g')
-	#done	
-	#echo $digram_adj
 	#If there is a lone digram add an X character to the end
 	digram=$(echo "${digram_adj}" | awk '{ if(length($0) % 2 == 0) print $0 "X"; else print $0 }')
-	#echo "$digram"	
 
 	ENCRYPTED_TEXT=()
 	#Rules for cipher	
 	tmp=(${digram})
 	for i in ${tmp[@]}
 	do
-		#echo "$i"
 		letter1="${i:0:1}"
 		letter2="${i:1:2}"
-		#echo $letter2
+
 		letter1_index=$(get_key "${letter1}")
 		letter2_index=$(get_key "${letter2}")
-		#echo $letter2_index	
+
 		# Index looks like 1,1 -> row,col	
 		row1=$(echo "${letter1_index}" | awk -F',' '{ print $1 }')
 		col1=$(echo "${letter1_index}" | awk -F',' '{ print $2 }')
 		row2=$(echo "${letter2_index}" | awk -F',' '{ print $1 }')
 		col2=$(echo "${letter2_index}" | awk -F',' '{ print $2 }')
-		#echo "$row1,$col1"
-		#echo "$row2,$col2"
+
 		# Check if on the same row, Take letter to the right
 		if [ "$row1" = "$row2" ];
 		then
@@ -258,8 +239,6 @@ encrypt_message() {
 			col2_n=$((${col2}+1))
 			[ "${col1_n}" -gt "4" ] && col1_n=0
 			[ "${col2_n}" -gt "4" ] && col2_n=0
-			#echo "NEW: $row1,$col1_n"
-			#echo "NEW: $row2,$col2_n"
 			
 			new_digram="${KEYSQUARE_MAP[$row1,$col1_n]}${KEYSQUARE_MAP[$row2,$col2_n]}"
 			ENCRYPTED_TEXT+=(${new_digram})
@@ -285,8 +264,6 @@ encrypt_message() {
 	echo "${ENCRYPTED_TEXT[@]}"
 	pretty_print "${ENCRYPTED_TEXT[@]}"
 }
-#echo "$INPUT_STRING"
-#encrypt_message
 
 # Decrypt any encrypted text
 decrypt_message() {
@@ -297,38 +274,24 @@ decrypt_message() {
 
 	#Remove spaces then split into digrams
 	digram=$(echo "$message_upper" | sed 's/ //g' | sed 's/\(.\{2\}\)/\1 /g')
-	#Remove any double characters in digram (e.g. MM with MX)
-	#digram_adj=$(echo "$digram" | sed 's/\(.\)\1/\1X/g')
 	
-	# If duplicates found then reshuffle again until resolved
-	#while [ "${digram}" != "${digram_adj}" ];
-	#do
-	#	digram=$(echo "${digram_adj}" | sed 's/ //g' | sed 's/\(.\{2\}\)/\1 /g')
-	#	digram_adj=$(echo "$digram" | sed 's/\(.\)\1/\1X/g')
-	#done	
-	#echo $digram_adj
-	#If there is a lone digram add an X character to the end
-	#digram=$(echo "${digram_adj}" | awk '{ if(length($0) % 2 == 0) print $0 "X"; else print $0 }')
-	#echo "$digram"
 	DECRYPTED_TEXT=()
 	#Rules for cipher	
 	tmp=(${digram})
 	for i in ${tmp[@]}
 	do
-		#echo "$i"
 		letter1="${i:0:1}"
 		letter2="${i:1:2}"
-		#echo $letter2
+
 		letter1_index=$(get_key "${letter1}")
 		letter2_index=$(get_key "${letter2}")
-		#echo $letter2_index	
+
 		# Index looks like 1,1 -> row,col	
 		row1=$(echo "${letter1_index}" | awk -F',' '{ print $1 }')
 		col1=$(echo "${letter1_index}" | awk -F',' '{ print $2 }')
 		row2=$(echo "${letter2_index}" | awk -F',' '{ print $1 }')
 		col2=$(echo "${letter2_index}" | awk -F',' '{ print $2 }')
-		#echo "$row1,$col1"
-		#echo "$row2,$col2"
+
 		# Check if on the same row, Take letter to the left
 		if [ "$row1" = "$row2" ];
 		then
@@ -336,8 +299,6 @@ decrypt_message() {
 			col2_n=$((${col2}-1))
 			[ "${col1_n}" -lt "0" ] && col1_n=4
 			[ "${col2_n}" -lt "0" ] && col2_n=4
-			#echo "NEW: $row1,$col1_n"
-			#echo "NEW: $row2,$col2_n"
 			
 			new_digram="${KEYSQUARE_MAP[$row1,$col1_n]}${KEYSQUARE_MAP[$row2,$col2_n]}"
 			DECRYPTED_TEXT+=(${new_digram})
@@ -360,10 +321,9 @@ decrypt_message() {
                         DECRYPTED_TEXT+=(${new_digram})
 		fi
 	done
-	echo "${DECRYPTED_TEXT[@]}" | sed 's/ //g' | sed 's/X$//g'
+	echo "${DECRYPTED_TEXT[@]}" | sed 's/ //g' | sed 's/X$//g' | sed 's/\(.\)X/\1\1/g'
 
 }
-#decrypt_message
 
 main() {
 	[ "${GENERATE_KEYSQUARE}" = "1" ] && generate_keysquare 
