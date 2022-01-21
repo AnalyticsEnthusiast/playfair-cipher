@@ -68,7 +68,7 @@ shift $((OPTIND-1))
 [ "${GENERATE_KEYSQUARE}" = "1" ] && [ "${DECRYPT}" = "1" ] && echo "Multiple options cannot be performed at once" && usage
 [ "${DECRYPT}" = "1" ] && [ "${ENCRYPT}" = "1" ] && echo "Cannot perform decrypt and encrypt options at the same time" && usage
 
-
+# Checks if the letter has already been added to the keysquare array
 check_letter_exists() {
 
 	letter="$1"
@@ -110,7 +110,7 @@ validate_keysquare() {
 }
 
 
-# Read inputfile into an HashMap
+# Read inputfile into an associative array
 read_keysquare() {
 	
 	if [ -f "${KEYSQUARE_PATH}" ];
@@ -166,12 +166,10 @@ generate_keysquare() {
 	tmp_array=(${letters[@]^^} ${ALPHA[@]^^})
 	for i in ${tmp_array[@]}
 	do
-		#echo "$i"
 		check_letter_exists ${i}
 		RC=$?
 		if [ "${RC}" = "1" ] && [ "${i}" != "J" ]; # If letter does not exist and is not equal to J
 		then
-			#echo ${i}
 			KEY_SQUARE+=(${i})
 		fi
 	done	
@@ -193,6 +191,7 @@ get_key() {
 
 }
 
+# Prints the encrypted text into a more readable form
 pretty_print() {
 	INPUT_TEXT=""
 	for i in "$*"; do INPUT_TEXT="${INPUT_TEXT}${i}"; done
