@@ -71,12 +71,11 @@ SE ND HE LP NO WX
 
 <p>If there is a single letter left over at the end, insert a "null" character, typically an "X". If a duplicate digram is generated (e.g. "MM") then the second letter is replaced by the null character ("MX"). </p>
 
-According to 
+<br>
 
-[tldp.org](https://tldp.org/LDP/abs/html/writingscripts.html)
+According to [tldp.org](https://tldp.org/LDP/abs/html/writingscripts.html)
 
-For each digram, there are three possibilities.
------------------------------------------------
+#### For each digram, there are three possibilities.
 
 1) Both letters will be on the same row of the key square:
    For each letter, substitute the one immediately to the right, in that
@@ -96,13 +95,13 @@ or
 
 ```
 
-The "TH" digram falls under case #3.
+The "HE" digram falls under case #3.
+N A M E 
+B C D F 
 H I K L
-P Q R T
 
-T --> L 
-H --> P
-
+H --> L 
+E --> N
 
 The "SE" digram falls under case #1.
 N A M E S     (Row containing "S" and "E")
@@ -126,6 +125,6 @@ NSMBL NHTSH XY
 
 <br>
 
-<p>In order to decrypt the above process is reversed to reveal the original plaintext message. </p>
+<p>In order to decrypt, the above process is reversed to reveal the original plaintext message. </p>
 
 
