@@ -93,8 +93,22 @@ print_keysquare() {
 #KEY_SQUARE=(a b c d e f g h i j k l m n o p q r s t u v w x y z)
 #print_keysquare > ${OUTPUT_PATH}
 
+# Check if the input keysquare is valid
 validate_keysquare() {
-	echo ""
+
+	[ "${#KEYSQUARE_MAP[@]}" -gt "25" ] && exit 1
+
+	for i in "${!KEYSQUARE_MAP[@]}"
+	do
+		key="$i"
+		value="${KEYSQUARE_MAP[$i]}"
+		#echo "$key : $value"
+		if [[ $value =~ [^a-zA-Z] ]];
+		then	
+			echo "Invalid keysquare exiting"
+			exit 1
+		fi
+	done	
 }
 
 
@@ -117,6 +131,9 @@ read_keysquare() {
 	else
 		echo "No keysquare file found, use -g to generate" && exit 1
 	fi
+
+	# Validate keysquare
+	validate_keysquare
 }
 #read_keysquare
 #echo "${KEYSQUARE_MAP[@]}"
